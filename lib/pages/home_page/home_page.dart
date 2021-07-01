@@ -16,13 +16,13 @@ class _HomePageState extends State<HomePage> {
   TextEditingController controller = TextEditingController();
   var maskFormatter = new MaskTextInputFormatter(mask: '##.###-###', filter: { "#": RegExp(r'[0-9]') });
 
-  FocusNode TextFieldFocus = FocusNode();
+  FocusNode textFieldFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TextFieldFocus.unfocus();
+        textFieldFocus.unfocus();
       },
       child: Scaffold(
         appBar: AppBarWidget(),
@@ -43,8 +43,9 @@ class _HomePageState extends State<HomePage> {
                       child: TextField(
                         controller: controller,
                         inputFormatters: [maskFormatter],
-                        focusNode: TextFieldFocus,
+                        focusNode: textFieldFocus,
                         style: AppTextStyles.textFieldText,
+                        onSubmitted: (_) => _buscar(),
                         decoration: InputDecoration(
                           hintText: "Ex: 00.000-000",
                           hintStyle: AppTextStyles.textFieldTextGray,
@@ -80,9 +81,7 @@ class _HomePageState extends State<HomePage> {
                         shadowColor: MaterialStateProperty.all(Colors.transparent),
                         backgroundColor: MaterialStateProperty.all(Colors.transparent),
                       ),
-                      onPressed: () {
-    
-                      },
+                      onPressed: _buscar
                     )
                   ],
                 ),
@@ -122,5 +121,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void _buscar() {
+
   }
 }
