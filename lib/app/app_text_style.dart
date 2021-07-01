@@ -15,11 +15,24 @@ class AppTextStyles {
     fontWeight: FontWeight.w500,
   );
 
+  static final TextStyle textFieldTextGray = GoogleFonts.notoSans(
+    color: AppColors.lightGray,
+    fontWeight: FontWeight.w500,
+  );
+  
   static final TextStyle titleBold = GoogleFonts.notoSans(
-    color: AppColors.secundary,
+    color: AppColors.darkGray,
     fontSize: 40,
     fontWeight: FontWeight.w600,
   );
+
+  static final TextStyle buttonText = GoogleFonts.notoSans(
+    color: AppColors.darkGray,
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+  );
+
+
 
 
 

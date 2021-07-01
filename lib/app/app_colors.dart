@@ -5,7 +5,18 @@ import 'package:flutter/material.dart';
 
 class AppColors {
 
+  static final Color primary = Color(0xFFF9AA33);
   static final Color secundary = Color(0xFF4A6572);
+  static final Color darkGray = Color(0xFF344955);
+  static final Color lightGray = Color(0xFFA9A9A9);
+  static final Color lightYellow = Color(0xFFFFD700);
+
+
+
+
+
+
+
 
   static final Color purple = Color(0xFF8257E5);
   static final Color white = Color(0xFFFFFFFF);
@@ -44,8 +55,20 @@ class AppColors {
 
   static final gradient = LinearGradient(
     colors: [
-      Color(0xFFFFFF00),
+      primary,
       Color.fromRGBO(255, 180, 0, 0.795),
+    ],
+    stops: [
+      0.0,
+      0.644
+    ],
+    transform: GradientRotation(2.13959913 * pi),
+  );
+
+  static final gradientButton = LinearGradient(
+    colors: [
+      primary,
+      Color.fromRGBO(255, 200, 0, 0.795),
     ],
     stops: [
       0.0,

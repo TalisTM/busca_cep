@@ -19,9 +19,10 @@ class TextResultWidget extends StatelessWidget {
         decoration: InputDecoration(
           labelText: tipo,
           labelStyle: AppTextStyles.textFieldText,
-          border: OutlineInputBorder(
+          disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-          )
+            borderSide: BorderSide(color: AppColors.primary)
+          ),
         ),
       ),
     );

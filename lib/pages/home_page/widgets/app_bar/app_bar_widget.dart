@@ -8,6 +8,7 @@ class AppBarWidget extends PreferredSize {
     preferredSize: Size.fromHeight(130),
     child: Container(
       decoration: BoxDecoration(
+        //borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
         gradient: AppColors.gradient
       ),
       child: Center(child: Text("BuscaCEP", style: AppTextStyles.titleBold)),

@@ -16,61 +16,110 @@ class _HomePageState extends State<HomePage> {
   TextEditingController controller = TextEditingController();
   var maskFormatter = new MaskTextInputFormatter(mask: '##.###-###', filter: { "#": RegExp(r'[0-9]') });
 
+  FocusNode TextFieldFocus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(),
-      backgroundColor: AppColors.secundary,
-      body: Row(
-        children: [
-          Expanded(
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("Digite seu CEP abaixo:", style: AppTextStyles.title),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: TextField(
-                      controller: controller,
-                      inputFormatters: [maskFormatter],
-                      style: AppTextStyles.textFieldText,
-                      decoration: InputDecoration(
-                        labelStyle: AppTextStyles.textFieldText,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        )
+    return GestureDetector(
+      onTap: () {
+        TextFieldFocus.unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBarWidget(),
+        backgroundColor: AppColors.secundary,
+        body: Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("Digite seu CEP abaixo:", style: AppTextStyles.title),
+                    SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        controller: controller,
+                        inputFormatters: [maskFormatter],
+                        focusNode: TextFieldFocus,
+                        style: AppTextStyles.textFieldText,
+                        decoration: InputDecoration(
+                          hintText: "Ex: 00.000-000",
+                          hintStyle: AppTextStyles.textFieldTextGray,
+                          labelStyle: AppTextStyles.textFieldText,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: AppColors.primary)
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: AppColors.primary)
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: AppColors.lightYellow)
+                          ),
+                        ),
                       ),
                     ),
-                  )
-                ],
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          gradient: AppColors.gradientButton,
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: Center(
+                          child: Text("Buscar", style: AppTextStyles.buttonText),
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        shadowColor: MaterialStateProperty.all(Colors.transparent),
+                        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                      ),
+                      onPressed: () {
+    
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextResultWidget("Rua", "Rua tal tal tal"),
-                  Row(
-                    children: [
-                      Expanded(flex: 8, child: TextResultWidget("Bairro", "bairro tal tal tal")),
-                      SizedBox(width: 10),
-                      Expanded(flex: 2, child: TextResultWidget("Número", "bairro tal tal tal")),
-                    ],
-                  ),
-                  TextResultWidget("Numero", "bairro tal tal tal"),
-                  TextResultWidget("Cidade", "bairro tal tal tal"),
-                  TextResultWidget("Estado", "bairro tal tal tal"),
-                ],
+            Center(
+              child: Icon(
+                Icons.double_arrow_rounded,
+                color: AppColors.primary,
+                size: 80,
               ),
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("Endereço:", style: AppTextStyles.title),
+                    SizedBox(height: 10),
+                    TextResultWidget("Rua", "Rua tal tal tal"),
+                    Row(
+                      children: [
+                        Expanded(flex: 8, child: TextResultWidget("Bairro", "bairro tal tal tal")),
+                        SizedBox(width: 10),
+                        Expanded(flex: 2, child: TextResultWidget("Número", "00")),
+                      ],
+                    ),
+                    TextResultWidget("Cidade", "cidade tal tal tal"),
+                    TextResultWidget("Estado", "estado tal tal"),
+                  ],
+                ),
+              )
             )
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
