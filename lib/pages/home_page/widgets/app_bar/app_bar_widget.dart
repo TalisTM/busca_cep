@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 class AppBarWidget extends PreferredSize {
 
-  AppBarWidget() : super(
-    preferredSize: Size.fromHeight(130),
+  AppBarWidget(bool web) : super(
+    preferredSize: Size.fromHeight(web ? 120 : 50),
     child: Container(
       decoration: BoxDecoration(
         //borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
         gradient: AppColors.gradient
       ),
-      child: Center(child: Text("BuscaCEP", style: AppTextStyles.titleBold)),
+      child: Center(child: Text("BuscaCEP", style: web ? AppTextStyles.titleBold : AppTextStyles.titleBoldMobile)),
     )
   );
 }

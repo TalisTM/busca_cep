@@ -25,6 +25,12 @@ class AppTextStyles {
     fontSize: 40,
     fontWeight: FontWeight.w600,
   );
+  
+  static final TextStyle titleBoldMobile = GoogleFonts.notoSans(
+    color: AppColors.darkGrey,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+  );
 
   static final TextStyle buttonText = GoogleFonts.notoSans(
     color: AppColors.darkGrey,

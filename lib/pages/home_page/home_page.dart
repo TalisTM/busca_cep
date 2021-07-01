@@ -37,121 +37,50 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool web = MediaQuery.of(context).size.width > 650;
+
     return GestureDetector(
       onTap: () {
         textFieldFocus.unfocus();
       },
       child: Scaffold(
-        appBar: AppBarWidget(),
+        appBar: AppBarWidget(web),
         backgroundColor: AppColors.secundary,
-        body: Row(
-          children: [
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+        body: web
+          ? Center(
+            child: SingleChildScrollView(
+              child: Row(
                   children: [
-                    Text("Digite seu CEP abaixo:", style: AppTextStyles.title),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: TextFormField(
-                        controller: cepController,
-                        inputFormatters: [maskFormatter],
-                        focusNode: textFieldFocus,
-                        onChanged: (_) {
-                          setState(() {
-                            msgError = null;
-                          });
-                        },
-                        style: AppTextStyles.textFieldText,
-                        onFieldSubmitted: (_) => _buscar(),
-                        decoration: InputDecoration(
-                          hintText: "Ex: 00.000-000",
-                          errorText: msgError,
-                          errorStyle: AppTextStyles.textFieldTextError,
-                          hintStyle: AppTextStyles.textFieldTextGray,
-                          labelStyle: AppTextStyles.textFieldText,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.primary)
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.lightRed)
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.darkRed)
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.primary)
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.lightYellow)
-                          ),
-                        ),
+                    Expanded(child: boxCep()),
+                    Center(
+                      child: Icon(
+                        Icons.double_arrow_rounded,
+                        color: AppColors.primary,
+                        size: 80,
                       ),
                     ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          gradient: AppColors.gradientButton,
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: Center(
-                          child: Text("Buscar", style: AppTextStyles.buttonText),
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        shadowColor: MaterialStateProperty.all(Colors.transparent),
-                        backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                      ),
-                      onPressed: _buscar
-                    )
+                    Expanded(child: boxEndereco())
                   ],
                 ),
-              ),
             ),
-            Center(
-              child: Icon(
-                Icons.double_arrow_rounded,
-                color: AppColors.primary,
-                size: 80,
-              ),
+          )
+          : SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                boxCep(),
+                RotationTransition(
+                  turns: AlwaysStoppedAnimation(90 / 360),
+                  child: Icon(
+                    Icons.double_arrow_rounded,
+                    color: AppColors.primary,
+                    size: 80,
+                  )
+                ),
+                boxEndereco()
+              ],
             ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(20),
-                child: loading
-                  ? Center(child: CircularProgressIndicator(color: AppColors.primary))
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Endereço do CEP ${cepController.text}:", style: AppTextStyles.title),
-                        SizedBox(height: 10),
-                        TextResultWidget("Rua", endereco.rua),
-                        TextResultWidget("Bairro", endereco.bairro),
-                        Row(
-                          children: [
-                            Expanded(flex: 8, child: TextResultWidget("Cidade", endereco.cidade)),
-                            SizedBox(width: 10),
-                            Expanded(flex: 2, child: TextResultWidget("UF", endereco.uf)),
-                          ],
-                        ),
-                      ],
-                    )
-              )
-            )
-          ],
-        ),
+          )
       ),
     );
   }
@@ -171,6 +100,105 @@ class _HomePageState extends State<HomePage> {
       loading = false;
     }
     setState(() {});
+  }
+
+  Widget boxCep() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text("Digite seu CEP abaixo:", style: AppTextStyles.title),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: TextFormField(
+              controller: cepController,
+              inputFormatters: [maskFormatter],
+              focusNode: textFieldFocus,
+              onChanged: (_) {
+                setState(() {
+                  msgError = null;
+                });
+              },
+              style: AppTextStyles.textFieldText,
+              onFieldSubmitted: (_) => _buscar(),
+              decoration: InputDecoration(
+                hintText: "Ex: 00.000-000",
+                errorText: msgError,
+                errorStyle: AppTextStyles.textFieldTextError,
+                hintStyle: AppTextStyles.textFieldTextGray,
+                labelStyle: AppTextStyles.textFieldText,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: AppColors.primary)
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: AppColors.lightRed)
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: AppColors.darkRed)
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: AppColors.primary)
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: AppColors.lightYellow)
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                gradient: AppColors.gradientButton,
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child: Center(
+                child: Text("Buscar", style: AppTextStyles.buttonText),
+              ),
+            ),
+            style: ButtonStyle(
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              backgroundColor: MaterialStateProperty.all(Colors.transparent),
+            ),
+            onPressed: _buscar
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget boxEndereco () {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: loading
+        ? Center(child: CircularProgressIndicator(color: AppColors.primary))
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Endereço do CEP ${cepController.text}:", style: AppTextStyles.title),
+              SizedBox(height: 10),
+              TextResultWidget("Rua", endereco.rua),
+              TextResultWidget("Bairro", endereco.bairro),
+              Row(
+                children: [
+                  Expanded(flex: 8, child: TextResultWidget("Cidade", endereco.cidade)),
+                  SizedBox(width: 10),
+                  Expanded(flex: 2, child: TextResultWidget("UF", endereco.uf)),
+                ],
+              ),
+            ],
+          )
+    );
   }
 }
 
