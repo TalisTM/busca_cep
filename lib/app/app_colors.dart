@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 class AppColors {
 
+  static final Color secundary = Color(0xFF4A6572);
+
   static final Color purple = Color(0xFF8257E5);
   static final Color white = Color(0xFFFFFFFF);
   static final Color black = Color(0xFF514766);

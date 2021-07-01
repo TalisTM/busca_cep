@@ -6,7 +6,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Buasca cep",
+      title: "Busca CEP",
       debugShowCheckedModeBanner: false,
       home: HomePage(),
     );

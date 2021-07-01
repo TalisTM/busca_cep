@@ -6,15 +6,24 @@ import 'app_colors.dart';
 class AppTextStyles {
   static final TextStyle title = GoogleFonts.notoSans(
     color: AppColors.white,
-    fontSize: 20,
-    fontWeight: FontWeight.w400,
+    fontSize: 28,
+    fontWeight: FontWeight.w500,
+  );
+
+  static final TextStyle textFieldText = GoogleFonts.notoSans(
+    color: AppColors.white,
+    fontWeight: FontWeight.w500,
   );
 
   static final TextStyle titleBold = GoogleFonts.notoSans(
-    color: AppColors.black,
+    color: AppColors.secundary,
     fontSize: 40,
     fontWeight: FontWeight.w600,
   );
+
+
+
+
 
   static final TextStyle heading = GoogleFonts.notoSans(
     color: AppColors.black,
