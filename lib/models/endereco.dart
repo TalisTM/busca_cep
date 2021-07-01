@@ -6,15 +6,12 @@ class EnderecoEntity {
   String bairro;
   String cidade;
   String uf;
-  String ddd;
-  
   EnderecoEntity({
-    required this.cep,
-    required this.rua,
-    required this.bairro,
-    required this.cidade,
-    required this.uf,
-    required this.ddd,
+    this.cep = "",
+    this.rua = "",
+    this.bairro = "",
+    this.cidade = "",
+    this.uf = "",
   });
 
   EnderecoEntity copyWith({
@@ -23,7 +20,6 @@ class EnderecoEntity {
     String? bairro,
     String? cidade,
     String? uf,
-    String? ddd,
   }) {
     return EnderecoEntity(
       cep: cep ?? this.cep,
@@ -31,7 +27,6 @@ class EnderecoEntity {
       bairro: bairro ?? this.bairro,
       cidade: cidade ?? this.cidade,
       uf: uf ?? this.uf,
-      ddd: ddd ?? this.ddd,
     );
   }
 
@@ -42,18 +37,16 @@ class EnderecoEntity {
       'bairro': bairro,
       'cidade': cidade,
       'uf': uf,
-      'ddd': ddd,
     };
   }
 
   factory EnderecoEntity.fromMap(Map<String, dynamic> map) {
     return EnderecoEntity(
       cep: map['cep'],
-      rua: map['rua'],
+      rua: map['logradouro'],
       bairro: map['bairro'],
-      cidade: map['cidade'],
+      cidade: map['localidade'],
       uf: map['uf'],
-      ddd: map['ddd'],
     );
   }
 
@@ -63,7 +56,7 @@ class EnderecoEntity {
 
   @override
   String toString() {
-    return 'EnderecoEntity(cep: $cep, rua: $rua, bairro: $bairro, cidade: $cidade, uf: $uf, ddd: $ddd)';
+    return 'EnderecoEntity(cep: $cep, rua: $rua, bairro: $bairro, cidade: $cidade, uf: $uf)';
   }
 
   @override
@@ -75,8 +68,7 @@ class EnderecoEntity {
       other.rua == rua &&
       other.bairro == bairro &&
       other.cidade == cidade &&
-      other.uf == uf &&
-      other.ddd == ddd;
+      other.uf == uf;
   }
 
   @override
@@ -85,7 +77,6 @@ class EnderecoEntity {
       rua.hashCode ^
       bairro.hashCode ^
       cidade.hashCode ^
-      uf.hashCode ^
-      ddd.hashCode;
+      uf.hashCode;
   }
 }

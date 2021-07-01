@@ -9,7 +9,7 @@ class TextResultWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller = TextEditingController(text: value);
+    TextEditingController controller = TextEditingController(text: value != "" ? value : "Não encontrado");
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextField(

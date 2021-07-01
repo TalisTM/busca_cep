@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:busca_cep/app/app_colors.dart';
 import 'package:busca_cep/app/app_text_style.dart';
+import 'package:busca_cep/models/endereco.dart';
 import 'package:busca_cep/pages/home_page/widgets/app_bar/app_bar_widget.dart';
 import 'package:busca_cep/pages/home_page/widgets/text_result/text_result_widget.dart';
+import 'package:busca_cep/services/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -13,11 +18,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  TextEditingController controller = TextEditingController();
-  var maskFormatter = new MaskTextInputFormatter(mask: '##.###-###', filter: { "#": RegExp(r'[0-9]') });
+  final StreamController _streamController = StreamController<Map>.broadcast();
 
+  TextEditingController cepController = TextEditingController();
+  var maskFormatter = new MaskTextInputFormatter(mask: '##.###-###', filter: { "#": RegExp(r'[0-9]') });
   FocusNode textFieldFocus = FocusNode();
   String? msgError;
+
+  EnderecoEntity endereco = EnderecoEntity();
+
+  bool loading = false;
+
+  @override
+  void dispose() {
+    _streamController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: TextFormField(
-                        controller: controller,
+                        controller: cepController,
                         inputFormatters: [maskFormatter],
                         focusNode: textFieldFocus,
                         onChanged: (_) {
@@ -113,24 +129,25 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text("Endereço:", style: AppTextStyles.title),
-                    SizedBox(height: 10),
-                    TextResultWidget("Rua", "Rua tal tal tal"),
-                    Row(
+                child: loading
+                  ? Center(child: CircularProgressIndicator(color: AppColors.primary))
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Expanded(flex: 8, child: TextResultWidget("Bairro", "bairro tal tal tal")),
-                        SizedBox(width: 10),
-                        Expanded(flex: 2, child: TextResultWidget("Número", "00")),
+                        Text("Endereço do CEP ${cepController.text}:", style: AppTextStyles.title),
+                        SizedBox(height: 10),
+                        TextResultWidget("Rua", endereco.rua),
+                        TextResultWidget("Bairro", endereco.bairro),
+                        Row(
+                          children: [
+                            Expanded(flex: 8, child: TextResultWidget("Cidade", endereco.cidade)),
+                            SizedBox(width: 10),
+                            Expanded(flex: 2, child: TextResultWidget("UF", endereco.uf)),
+                          ],
+                        ),
                       ],
-                    ),
-                    TextResultWidget("Cidade", "cidade tal tal tal"),
-                    TextResultWidget("Estado", "estado tal tal"),
-                  ],
-                ),
+                    )
               )
             )
           ],
@@ -139,13 +156,76 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _buscar() {
-    String cep = controller.text.replaceAll(".", "").replaceAll("-", "");
+  void _buscar() async {
+    String cep = cepController.text.replaceAll(".", "").replaceAll("-", "");
     if (cep.length < 8) {
+      msgError = "CEP inválido";
+    } else {
       setState(() {
-        msgError = "CEP inválido";
+        loading = true;
       });
+      var retorno = await Api.buscarCep(cep);
+      if (retorno['erro'] == null || retorno['erro'].toString() != "true") {
+        endereco = EnderecoEntity.fromMap(retorno);
+      }
+      loading = false;
     }
-    
+    setState(() {});
   }
 }
+
+                // try {
+                //   _streamController.add(retorno);
+                //   setState(() {});
+                // } catch (e) {}
+
+
+
+                // StreamBuilder (
+                //   stream: _streamController.stream,
+                //   builder: (context, snapshot) {
+                //     switch (snapshot.connectionState) {
+                //       case ConnectionState.none:
+                //       case ConnectionState.waiting:
+                //         return Center(
+                //           child: CircularProgressIndicator(
+                //             color: AppColors.primary,
+                //           ),
+                //         );
+                //       default:
+                //         if (snapshot.hasError || snapshot.data == null) {
+                //           return Center(
+                //             child: Column(
+                //               children: [
+                //                 Text(
+                //                   "Ocorreu um erro ao buscar pelo CEP"
+                //                 ),
+                //                 Text(
+                //                   "Verifique sua conexão e tente novamente"
+                //                 )
+                //               ],
+                //             ),
+                //           );
+                //         } else {
+                //           endereco = EnderecoEntity.fromMap(snapshot.data);
+                //           return Column(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             crossAxisAlignment: CrossAxisAlignment.center,
+                //             children: [
+                //               Text("Endereço do CEP ${cepController.text}:", style: AppTextStyles.title),
+                //               SizedBox(height: 10),
+                //               TextResultWidget("Rua", endereco.rua),
+                //               TextResultWidget("Bairro", endereco.bairro),
+                //               Row(
+                //                 children: [
+                //                   Expanded(flex: 8, child: TextResultWidget("Cidade", endereco.cidade)),
+                //                   SizedBox(width: 10),
+                //                   Expanded(flex: 2, child: TextResultWidget("UF", endereco.uf)),
+                //                 ],
+                //               ),
+                //             ],
+                //           );
+                //         }
+                //     }
+                //   },
+                // )

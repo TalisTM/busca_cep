@@ -7,13 +7,18 @@ class ApiBuscarCep {
 
   static buscarCep (String cep) async {
     try {
-      http.Response response = await http.get(Uri.parse("viacep.com.br/ws/$cep/json/"));
+      http.Response response = await http.get(
+        Uri.parse("https://viacep.com.br/ws/$cep/json/"),
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      );
 
-      if(response.body.isNotEmpty) 
+      if(response.body.isNotEmpty)
         return json.decode(response.body);
-      else return "404";
+      else return {"erro" : true};
     } catch (e) {
-      return "404";
+      return {"erro" : true};
     }
   }  
 }
