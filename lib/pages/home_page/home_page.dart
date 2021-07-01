@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> {
   var maskFormatter = new MaskTextInputFormatter(mask: '##.###-###', filter: { "#": RegExp(r'[0-9]') });
 
   FocusNode textFieldFocus = FocusNode();
+  String? msgError;
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +41,34 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: TextField(
+                      child: TextFormField(
                         controller: controller,
                         inputFormatters: [maskFormatter],
                         focusNode: textFieldFocus,
+                        onChanged: (_) {
+                          setState(() {
+                            msgError = null;
+                          });
+                        },
                         style: AppTextStyles.textFieldText,
-                        onSubmitted: (_) => _buscar(),
+                        onFieldSubmitted: (_) => _buscar(),
                         decoration: InputDecoration(
                           hintText: "Ex: 00.000-000",
+                          errorText: msgError,
+                          errorStyle: AppTextStyles.textFieldTextError,
                           hintStyle: AppTextStyles.textFieldTextGray,
                           labelStyle: AppTextStyles.textFieldText,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                             borderSide: BorderSide(color: AppColors.primary)
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: AppColors.lightRed)
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: AppColors.darkRed)
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -124,6 +140,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _buscar() {
-
+    String cep = controller.text.replaceAll(".", "").replaceAll("-", "");
+    if (cep.length < 8) {
+      setState(() {
+        msgError = "CEP inválido";
+      });
+    }
+    
   }
 }
