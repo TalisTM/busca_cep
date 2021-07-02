@@ -9,6 +9,18 @@ class AppTextStyles {
     fontSize: 28,
     fontWeight: FontWeight.w500,
   );
+  
+  static final TextStyle titleErro = GoogleFonts.notoSans(
+    color: AppColors.white,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+  );
+
+  static final TextStyle content = GoogleFonts.notoSans(
+    color: AppColors.white,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
 
   static final TextStyle textFieldText = GoogleFonts.notoSans(
     color: AppColors.white,

@@ -49,19 +49,24 @@ class _HomePageState extends State<HomePage> {
         body: web
           ? Center(
             child: SingleChildScrollView(
-              child: Row(
-                  children: [
-                    Expanded(child: boxCep()),
-                    Center(
-                      child: Icon(
-                        Icons.double_arrow_rounded,
-                        color: AppColors.primary,
-                        size: 80,
-                      ),
-                    ),
-                    Expanded(child: boxEndereco())
-                  ],
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: 1000
                 ),
+                child: Row(
+                    children: [
+                      Expanded(child: boxCep()),
+                      Center(
+                        child: Icon(
+                          Icons.double_arrow_rounded,
+                          color: AppColors.primary,
+                          size: 80,
+                        ),
+                      ),
+                      Expanded(child: boxEndereco())
+                    ],
+                  ),
+              ),
             ),
           )
           : SingleChildScrollView(
@@ -77,7 +82,8 @@ class _HomePageState extends State<HomePage> {
                     size: 80,
                   )
                 ),
-                boxEndereco()
+                boxEndereco(),
+                SizedBox(height: 30)
               ],
             ),
           )
@@ -93,9 +99,40 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         loading = true;
       });
-      var retorno = await Api.buscarCep(cep);
+      Map<String, dynamic> retorno = await Api.buscarCep(cep);
       if (retorno['erro'] == null || retorno['erro'].toString() != "true") {
         endereco = EnderecoEntity.fromMap(retorno);
+      } else {
+        endereco = EnderecoEntity();
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: AppColors.secundary,
+            title: Text("Erro", style: AppTextStyles.titleErro),
+            content: Text("Lamentamos, ocorreu um erro ao buscar pelo CEP: \"${cepController.text}\".\nVerifique sua conexão e tente novamente.", style: AppTextStyles.content),
+            actions: [
+              Container(
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: TextButton(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      gradient: AppColors.gradientButton,
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Center(
+                      child: Text("Ok", style: AppTextStyles.buttonText),
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                    backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                  ),
+                  onPressed: () => Navigator.pop(context)
+                ),
+              )
+            ],
+          ));
       }
       loading = false;
     }
@@ -111,50 +148,47 @@ class _HomePageState extends State<HomePage> {
         children: [
           Text("Digite seu CEP abaixo:", style: AppTextStyles.title),
           SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: TextFormField(
-              controller: cepController,
-              inputFormatters: [maskFormatter],
-              focusNode: textFieldFocus,
-              onChanged: (_) {
-                setState(() {
-                  msgError = null;
-                });
-              },
-              style: AppTextStyles.textFieldText,
-              onFieldSubmitted: (_) => _buscar(),
-              decoration: InputDecoration(
-                hintText: "Ex: 00.000-000",
-                errorText: msgError,
-                errorStyle: AppTextStyles.textFieldTextError,
-                hintStyle: AppTextStyles.textFieldTextGray,
-                labelStyle: AppTextStyles.textFieldText,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: AppColors.primary)
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: AppColors.lightRed)
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: AppColors.darkRed)
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: AppColors.primary)
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: AppColors.lightYellow)
-                ),
+          TextFormField(
+            controller: cepController,
+            inputFormatters: [maskFormatter],
+            focusNode: textFieldFocus,
+            onChanged: (_) {
+              setState(() {
+                msgError = null;
+              });
+            },
+            style: AppTextStyles.textFieldText,
+            onFieldSubmitted: (_) => _buscar(),
+            decoration: InputDecoration(
+              hintText: "Ex: 00.000-000",
+              errorText: msgError,
+              errorStyle: AppTextStyles.textFieldTextError,
+              hintStyle: AppTextStyles.textFieldTextGray,
+              labelStyle: AppTextStyles.textFieldText,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: AppColors.primary)
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: AppColors.lightRed)
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: AppColors.darkRed)
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: AppColors.primary)
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: AppColors.lightYellow)
               ),
             ),
           ),
           SizedBox(height: 20),
-          ElevatedButton(
+          TextButton(
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
