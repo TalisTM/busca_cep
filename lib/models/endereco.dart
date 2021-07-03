@@ -6,6 +6,7 @@ class EnderecoEntity {
   String bairro;
   String cidade;
   String uf;
+  
   EnderecoEntity({
     this.cep = "",
     this.rua = "",

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:busca_cep/app/app_colors.dart';
 import 'package:busca_cep/app/app_text_style.dart';
@@ -235,59 +234,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-                // try {
-                //   _streamController.add(retorno);
-                //   setState(() {});
-                // } catch (e) {}
-
-
-
-                // StreamBuilder (
-                //   stream: _streamController.stream,
-                //   builder: (context, snapshot) {
-                //     switch (snapshot.connectionState) {
-                //       case ConnectionState.none:
-                //       case ConnectionState.waiting:
-                //         return Center(
-                //           child: CircularProgressIndicator(
-                //             color: AppColors.primary,
-                //           ),
-                //         );
-                //       default:
-                //         if (snapshot.hasError || snapshot.data == null) {
-                //           return Center(
-                //             child: Column(
-                //               children: [
-                //                 Text(
-                //                   "Ocorreu um erro ao buscar pelo CEP"
-                //                 ),
-                //                 Text(
-                //                   "Verifique sua conexão e tente novamente"
-                //                 )
-                //               ],
-                //             ),
-                //           );
-                //         } else {
-                //           endereco = EnderecoEntity.fromMap(snapshot.data);
-                //           return Column(
-                //             mainAxisAlignment: MainAxisAlignment.center,
-                //             crossAxisAlignment: CrossAxisAlignment.center,
-                //             children: [
-                //               Text("Endereço do CEP ${cepController.text}:", style: AppTextStyles.title),
-                //               SizedBox(height: 10),
-                //               TextResultWidget("Rua", endereco.rua),
-                //               TextResultWidget("Bairro", endereco.bairro),
-                //               Row(
-                //                 children: [
-                //                   Expanded(flex: 8, child: TextResultWidget("Cidade", endereco.cidade)),
-                //                   SizedBox(width: 10),
-                //                   Expanded(flex: 2, child: TextResultWidget("UF", endereco.uf)),
-                //                 ],
-                //               ),
-                //             ],
-                //           );
-                //         }
-                //     }
-                //   },
-                // )
