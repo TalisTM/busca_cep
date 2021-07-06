@@ -25,7 +25,7 @@ class TextResultWidget extends StatelessWidget {
             ? IconButton(
               icon: Icon(Icons.copy, color: AppColors.white),
               onPressed: () {
-                Clipboard.setData(ClipboardData(text: value));
+                Clipboard.setData(new ClipboardData(text: value));
               }
             )
             : SizedBox(),
