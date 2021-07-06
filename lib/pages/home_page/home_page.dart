@@ -28,6 +28,11 @@ class _HomePageState extends State<HomePage> {
 
   bool loading = false;
 
+  TextEditingController rua = TextEditingController();
+  TextEditingController bairro = TextEditingController();
+  TextEditingController cidade = TextEditingController();
+  TextEditingController uf = TextEditingController();
+
   @override
   void dispose() {
     _streamController.close();
@@ -133,6 +138,11 @@ class _HomePageState extends State<HomePage> {
             ],
           ));
       }
+
+      rua.text = endereco.rua;
+      bairro.text = endereco.bairro;
+      cidade.text = endereco.cidade;
+      uf.text = endereco.uf;
       loading = false;
     }
     setState(() {});
@@ -220,13 +230,13 @@ class _HomePageState extends State<HomePage> {
             children: [
               Text("Endereço do CEP ${cepController.text}:", style: AppTextStyles.title),
               SizedBox(height: 10),
-              TextResultWidget("Rua", endereco.rua),
-              TextResultWidget("Bairro", endereco.bairro),
+              TextResultWidget("Rua", rua, endereco.rua),
+              TextResultWidget("Bairro", bairro, endereco.bairro),
               Row(
                 children: [
-                  Expanded(flex: 8, child: TextResultWidget("Cidade", endereco.cidade)),
+                  Expanded(flex: 75, child: TextResultWidget("Cidade", cidade, endereco.cidade)),
                   SizedBox(width: 10),
-                  Expanded(flex: 2, child: TextResultWidget("UF", endereco.uf)),
+                  Expanded(flex: 25, child: TextResultWidget("UF", uf, endereco.uf)),
                 ],
               ),
             ],
